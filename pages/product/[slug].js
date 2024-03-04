@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 
-export default function Page() {
+export default function Page({ addToCart }) {
   const router = useRouter();
   const { slug } = router.query;
   return (
@@ -163,7 +163,19 @@ export default function Page() {
                 <span className="title-font font-medium text-2xl text-gray-900">
                   $58.00
                 </span>
-                <button className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">
+                <button
+                  onClick={() =>
+                    addToCart(
+                      slug,
+                      1,
+                      58.0,
+                      "Wear the Code(Xl, Red",
+                      "XL",
+                      "Red"
+                    )
+                  }
+                  className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
+                >
                   Add to Cart
                 </button>
                 <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
