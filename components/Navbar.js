@@ -6,6 +6,7 @@ import { MdShoppingCart } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
+import { MdAccountCircle } from "react-icons/md";
 
 const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const toggleCart = () => {
@@ -23,7 +24,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   };
   const ref = useRef();
   return (
-    <div>
+    <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font">
         <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center shadow-md w-full">
           <Link
@@ -32,7 +33,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           >
             <Image src="/logo.png" alt="logo" width={200} height={40} />
           </Link>
-          <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
+          <nav className="md:ml-10 flex flex-wrap items-center text-base justify-center">
             <Link href={"/tshirts"} className="mr-5 hover:text-gray-900">
               Tshirts
             </Link>
@@ -60,15 +61,21 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </button>
+          <div className="ml-auto">
+            <Link href={"/login"}>
+              <MdAccountCircle className="text-3xl" />
+            </Link>
+          </div>
+
           <div
             onClick={toggleCart}
-            className="cart absolute top-7 right-0 mx-5"
+            className="cart absolute top-7 right-1 mx-5"
           >
-            <MdShoppingCart className="text-2xl" />
+            <MdShoppingCart className="text-3xl" />
           </div>
           <div
             ref={ref}
-            className="sideCart h-full absolute top-0 right-0 bg-gray-100 p-10 transition-transform translate-x-full hidden"
+            className="sideCart h-[100vh] absolute top-0 right-0 bg-gray-100 p-10 transition-transform translate-x-full hidden"
           >
             <h2 className="font-bold text-x1">Shopping Cart</h2>
             <span onClick={toggleCart} className="absolute top-2 right-2">
@@ -117,11 +124,15 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                 );
               })}
             </ol>
+            <div className="total font-bold my-2"> Subtotal: ${subTotal}</div>
+
             <div className="flex">
-              <button className="flex mx-2 mt-16 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
-                <IoBagCheckOutline className="m-1" />
-                Checkout
-              </button>
+              <Link href={"/checkout"}>
+                <button className="flex mx-2 mt-16 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
+                  <IoBagCheckOutline className="m-1" />
+                  Checkout
+                </button>
+              </Link>
               <button
                 onClick={clearCart}
                 className="flex mx-2 mt-16 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg"

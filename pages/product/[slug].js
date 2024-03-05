@@ -169,7 +169,7 @@ export default function Page({ addToCart }) {
                       slug,
                       1,
                       58.0,
-                      "Wear the Code(Xl, Red",
+                      "Wear the Code(Xl, Red)",
                       "XL",
                       "Red"
                     )

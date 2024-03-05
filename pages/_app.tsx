@@ -22,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       const storedCart = localStorage.getItem("cart");
       if (storedCart !== null) {
         setCart(JSON.parse(storedCart));
+        saveCart(JSON.parse(storedCart));
       } else {
         console.log("Nothing in the local storage cart");
       }
