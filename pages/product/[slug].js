@@ -1,9 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
+import mongoose from "mongoose";
+import Product from "../../models/Product";
+import { useState } from "react";
 
-export default function Page({ addToCart }) {
+export default function Page({ addToCart, product, variants }) {
   const router = useRouter();
   const { slug } = router.query;
+  const [color, setcolor] = useState(product.color);
+  const [size, setSize] = useState(product.size);
+  const refreshVariant = (newsize, newcolor) => {
+    let url = `http://localhost:3000/product/${variants[newcolor][newsize]["slug"]}`;
+    window.location = url;
+  };
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden">
@@ -11,15 +20,15 @@ export default function Page({ addToCart }) {
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"
-              className="lg:w-1/2 w-full lg:h-auto sm:px-24 md:px-10 object-cover object-center rounded"
-              src="https://m.media-amazon.com/images/I/41VyuGAOQUL._AC_SX679_.jpg"
+              className="lg:w-1/3 w-full h-[40vh] sm:px-24 md:px-10 object-cover object-center rounded"
+              src={product.img}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                BRAND NAME
+                Codeswear
               </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-                The Catcher in the Rye
+                {product.title}({product.size}/{product.color})
               </h1>
               <div className="flex mb-4">
                 <span className="flex items-center">
@@ -119,29 +128,106 @@ export default function Page({ addToCart }) {
                   </a>
                 </span>
               </div>
-              <p className="leading-relaxed">
-                Fam locavore kickstarter distillery. Mixtape chillwave tumeric
-                sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo
-                juiceramps cornhole raw denim forage brooklyn. Everyday carry +1
-                seitan poutine tumeric. Gastropub blue bottle austin listicle
-                pour-over, neutra jean shorts keytar banjo tattooed umami
-                cardigan.
-              </p>
+              <p className="leading-relaxed">{product.desc}</p>
               <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                 <div className="flex">
                   <span className="mr-3">Color</span>
-                  <button className="border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none"></button>
-                  <button className="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none"></button>
-                  <button className="border-2 border-gray-300 ml-1 bg-pink-500 rounded-full w-6 h-6 focus:outline-none"></button>
+                  {Object.keys(variants).includes("red") &&
+                    Object.keys(variants["red"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "red");
+                        }}
+                        className={`border-2 ml-1 bg-red-600 rounded-full w-6 h-6 focus:outline-none ${
+                          color === "red" ? "border-black" : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
+                  {Object.keys(variants).includes("blue") &&
+                    Object.keys(variants["blue"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "blue");
+                        }}
+                        className={`border-2 ml-1 bg-blue-600 rounded-full w-6 h-6 focus:outline-none ${
+                          color === "blue" ? "border-black" : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
+                  {Object.keys(variants).includes("green") &&
+                    Object.keys(variants["green"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "green");
+                        }}
+                        className={`border-2 ml-1 bg-green-600 rounded-full w-6 h-6 focus:outline-none ${
+                          color === "green" ? "border-black" : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
+                  {Object.keys(variants).includes("yellow") &&
+                    Object.keys(variants["yellow"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "yellow");
+                        }}
+                        className={`border-2 ml-1 bg-yellow-600 rounded-full w-6 h-6 focus:outline-none ${
+                          color === "yellow"
+                            ? "border-black"
+                            : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
+                  {Object.keys(variants).includes("black") &&
+                    Object.keys(variants["black"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "black");
+                        }}
+                        className={`border-2 ml-1 bg-black rounded-full w-6 h-6 focus:outline-none ${
+                          color === "black" ? "border-white" : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
+                  {Object.keys(variants).includes("purple") &&
+                    Object.keys(variants["purple"]).includes(size) && (
+                      <button
+                        onClick={() => {
+                          refreshVariant(size, "purple");
+                        }}
+                        className={`border-2 ml-1 bg-purple-600 rounded-full w-6 h-6 focus:outline-none ${
+                          color === "purple"
+                            ? "border-black"
+                            : "border-gray-300"
+                        }`}
+                      ></button>
+                    )}
                 </div>
                 <div className="flex ml-6 items-center">
                   <span className="mr-3">Size</span>
                   <div className="relative">
-                    <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-500 text-base pl-3 pr-10">
-                      <option>SM</option>
-                      <option>M</option>
-                      <option>L</option>
-                      <option>XL</option>
+                    <select
+                      value={size}
+                      onChange={(e) => {
+                        refreshVariant(e.target.value, color);
+                      }}
+                      className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-500 text-base pl-3 pr-10"
+                    >
+                      {Object.keys(variants[color]).includes("S") && (
+                        <option value={"S"}>S</option>
+                      )}
+                      {Object.keys(variants[color]).includes("M") && (
+                        <option value={"M"}>M</option>
+                      )}
+                      {Object.keys(variants[color]).includes("L") && (
+                        <option value={"L"}>L</option>
+                      )}
+                      {Object.keys(variants[color]).includes("XL") && (
+                        <option value={"XL"}>XL</option>
+                      )}
+                      {Object.keys(variants[color]).includes("XXL") && (
+                        <option value={"XXL"}>XXL</option>
+                      )}
                     </select>
                     <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                       <svg
@@ -168,10 +254,10 @@ export default function Page({ addToCart }) {
                     addToCart(
                       slug,
                       1,
-                      58.0,
-                      "Wear the Code(Xl, Red)",
-                      "XL",
-                      "Red"
+                      product.price,
+                      product.title,
+                      size,
+                      color
                     )
                   }
                   className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
@@ -197,4 +283,27 @@ export default function Page({ addToCart }) {
       </section>
     </>
   );
+}
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  let product = await Product.findOne({ slug: context.query.slug });
+  let variants = await Product.find({ title: product.title });
+  let colorSizeSlug = {}; //{red: {XL: {slug: 'wear-the-code'}}}
+  for (let item of variants) {
+    if (Object.keys(colorSizeSlug).includes(item.color)) {
+      colorSizeSlug[item.color][item.size] = { slug: item.slug };
+    } else {
+      colorSizeSlug[item.color] = {};
+      colorSizeSlug[item.color][item.size] = { slug: item.slug };
+    }
+  }
+
+  return {
+    props: {
+      product: JSON.parse(JSON.stringify(product)),
+      variants: JSON.parse(JSON.stringify(colorSizeSlug)),
+    },
+  };
 }

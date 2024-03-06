@@ -89,7 +89,9 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                 return (
                   <li key={k}>
                     <div className="item flex my-5">
-                      <div className="w-2/3 font-semibold">{cart[k].name}</div>
+                      <div className="w-2/3 font-semibold">
+                        {cart[k].name}({cart[k].size}/{cart[k].variant})
+                      </div>
                       <div className="flex items-center justify-center w-1/3 text-md">
                         <FaMinus
                           onClick={() => {
