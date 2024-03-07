@@ -1,8 +1,46 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = { name, email, password };
+    try {
+      const response = await fetch("http://localhost:3000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log("Success:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setEmail("");
+    setName("");
+    setPassword("");
+    toast.success("Your Account has been created.");
+  };
+  const handleChange = (e) => {
+    if (e.target.name == "name") {
+      setName(e.target.value);
+    } else if (e.target.name == "email") {
+      setEmail(e.target.value);
+    } else if (e.target.name == "password") {
+      setPassword(e.target.value);
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -26,7 +64,7 @@ const Signup = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form onSubmit={handleSubmit} className="space-y-6" method="POST">
           <div>
             <label
               htmlFor="name"
@@ -36,6 +74,8 @@ const Signup = () => {
             </label>
             <div className="mt-2">
               <input
+                value={name}
+                onChange={handleChange}
                 id="name"
                 name="name"
                 type="text"
@@ -54,6 +94,8 @@ const Signup = () => {
             </label>
             <div className="mt-2">
               <input
+                value={email}
+                onChange={handleChange}
                 id="email"
                 name="email"
                 type="email"
@@ -83,6 +125,8 @@ const Signup = () => {
             </div>
             <div className="mt-2">
               <input
+                value={password}
+                onChange={handleChange}
                 id="password"
                 name="password"
                 type="password"
@@ -100,6 +144,18 @@ const Signup = () => {
             >
               Sign Up
             </button>
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
           </div>
         </form>
       </div>
