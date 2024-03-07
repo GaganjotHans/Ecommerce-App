@@ -1,8 +1,51 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = { email, password };
+    let result = "";
+    try {
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      result = await response.json();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setEmail("");
+    setPassword("");
+    if (result.success) {
+      toast.success("You have successfully Logged In.");
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    } else {
+      toast.error(result.error);
+    }
+  };
+  const handleChange = (e) => {
+    if (e.target.name == "email") {
+      setEmail(e.target.value);
+    } else if (e.target.name == "password") {
+      setPassword(e.target.value);
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -26,7 +69,7 @@ const Login = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <form className="space-y-6" onSubmit={handleSubmit} method="POST">
           <div>
             <label
               htmlFor="email"
@@ -36,6 +79,8 @@ const Login = () => {
             </label>
             <div className="mt-2">
               <input
+                onChange={handleChange}
+                value={email}
                 id="email"
                 name="email"
                 type="email"
@@ -65,6 +110,8 @@ const Login = () => {
             </div>
             <div className="mt-2">
               <input
+                onChange={handleChange}
+                value={password}
                 id="password"
                 name="password"
                 type="password"
@@ -82,6 +129,18 @@ const Login = () => {
             >
               Sign in
             </button>
+            <ToastContainer
+              position="top-center"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
           </div>
         </form>
       </div>
