@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import mongoose from "mongoose";
 import Product from "../../models/Product";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Page({ addToCart, product, variants, buyNow }) {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function Page({ addToCart, product, variants, buyNow }) {
     let url = `http://localhost:3000/product/${variants[newcolor][newsize]["slug"]}`;
     window.location = url;
   };
+  const notify = () => toast.success("Added to Cart Successfully!");
 
   return (
     <>
@@ -258,9 +261,8 @@ export default function Page({ addToCart, product, variants, buyNow }) {
                 >
                   Buy Now
                 </button>
-
                 <button
-                  onClick={() =>
+                  onClick={() => {
                     addToCart(
                       slug,
                       1,
@@ -268,12 +270,25 @@ export default function Page({ addToCart, product, variants, buyNow }) {
                       product.title,
                       size,
                       color
-                    )
-                  }
+                    );
+                    notify();
+                  }}
                   className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
                 >
                   Add to Cart
                 </button>
+                <ToastContainer
+                  position="top-right"
+                  autoClose={2000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="dark"
+                />
               </div>
             </div>
           </div>
