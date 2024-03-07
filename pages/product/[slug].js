@@ -251,7 +251,7 @@ export default function Page({ addToCart, product, variants, buyNow }) {
               </div>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">
-                  $58.00
+                  ${product.price}
                 </span>
                 <button
                   onClick={() =>
@@ -302,7 +302,10 @@ export async function getServerSideProps(context) {
     await mongoose.connect(process.env.MONGO_URI);
   }
   let product = await Product.findOne({ slug: context.query.slug });
-  let variants = await Product.find({ title: product.title });
+  let variants = await Product.find({
+    title: product.title,
+    category: product.category,
+  });
   let colorSizeSlug = {}; //{red: {XL: {slug: 'wear-the-code'}}}
   for (let item of variants) {
     if (Object.keys(colorSizeSlug).includes(item.color)) {

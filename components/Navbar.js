@@ -71,7 +71,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             onClick={toggleCart}
             className="cart absolute top-7 right-1 mx-5"
           >
-            <MdShoppingCart className="text-3xl" />
+            <MdShoppingCart className="text-3xl cursor-pointer" />
           </div>
           <div
             ref={ref}
