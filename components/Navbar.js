@@ -75,7 +75,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           </div>
           <div
             ref={ref}
-            className="sideCart h-[100vh] absolute top-0 right-0 bg-gray-100 p-10 transition-transform translate-x-full hidden"
+            className="sideCart overflow-y-auto h-[100vh] absolute top-0 right-0 bg-gray-100 p-10 transition-transform translate-x-full hidden"
           >
             <h2 className="font-bold text-x1">Shopping Cart</h2>
             <span onClick={toggleCart} className="absolute top-2 right-2">

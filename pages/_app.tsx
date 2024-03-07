@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 interface CartItem {
   qty: number;
@@ -13,6 +14,7 @@ interface CartItem {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const [cart, setCart] = useState<{ [key: string]: CartItem }>({});
   const [subTotal, setSubTotal] = useState(0);
 
@@ -65,6 +67,26 @@ export default function App({ Component, pageProps }: AppProps) {
     setCart({});
     setSubTotal(0);
   };
+  const buyNow = (
+    itemCode: string,
+    qty: number,
+    price: number,
+    name: string,
+    size: string,
+    variant: string
+  ) => {
+    localStorage.removeItem("cart");
+    setCart({});
+    const newCart: any = {};
+    if (itemCode in newCart) {
+      newCart[itemCode].qty = cart[itemCode].qty + qty;
+    } else {
+      newCart[itemCode] = { qty: 1, price, name, size, variant };
+    }
+    setCart(newCart);
+    saveCart(newCart);
+    router.push("/checkout");
+  };
   const removeFromCart = (
     itemCode: string,
     qty: number,
@@ -98,6 +120,7 @@ export default function App({ Component, pageProps }: AppProps) {
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
+        buyNow={buyNow}
         {...pageProps}
       />
       ;

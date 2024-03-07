@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import Product from "../../models/Product";
 import { useState } from "react";
 
-export default function Page({ addToCart, product, variants }) {
+export default function Page({ addToCart, product, variants, buyNow }) {
   const router = useRouter();
   const { slug } = router.query;
   const [color, setcolor] = useState(product.color);
@@ -13,6 +13,7 @@ export default function Page({ addToCart, product, variants }) {
     let url = `http://localhost:3000/product/${variants[newcolor][newsize]["slug"]}`;
     window.location = url;
   };
+
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden">
@@ -251,6 +252,15 @@ export default function Page({ addToCart, product, variants }) {
                 </span>
                 <button
                   onClick={() =>
+                    buyNow(slug, 1, product.price, product.title, size, color)
+                  }
+                  className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
+                >
+                  Buy Now
+                </button>
+
+                <button
+                  onClick={() =>
                     addToCart(
                       slug,
                       1,
@@ -263,18 +273,6 @@ export default function Page({ addToCart, product, variants }) {
                   className="flex ml-auto text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded"
                 >
                   Add to Cart
-                </button>
-                <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                  <svg
-                    fill="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                  </svg>
                 </button>
               </div>
             </div>
