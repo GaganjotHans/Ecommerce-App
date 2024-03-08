@@ -17,10 +17,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [cart, setCart] = useState<{ [key: string]: CartItem }>({});
   const [subTotal, setSubTotal] = useState(0);
+  const [user, setUser] = useState({ value: "" });
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     try {
-      console.log("Hey there");
       const storedCart = localStorage.getItem("cart");
       if (storedCart !== null) {
         setCart(JSON.parse(storedCart));
@@ -32,8 +33,18 @@ export default function App({ Component, pageProps }: AppProps) {
       console.error(error);
       localStorage.clear();
     }
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser({ value: token });
+      setKey(Math.random());
+    }
+  }, [router.query]);
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser({ value: "" });
+    setKey(Math.random());
+  };
   const addToCart = (
     itemCode: string,
     qty: number,
@@ -108,6 +119,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navbar
+        key={key}
+        logout={logout}
+        user={user}
         cart={cart}
         addToCart={addToCart}
         removeFromCart={removeFromCart}

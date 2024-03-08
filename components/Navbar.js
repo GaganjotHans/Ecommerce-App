@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdShoppingCart } from "react-icons/md";
@@ -8,7 +8,18 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 
-const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+const Navbar = ({
+  cart,
+  addToCart,
+  removeFromCart,
+  clearCart,
+  subTotal,
+  user,
+  logout,
+}) => {
+  const [dropdown, setDropdown] = useState(false);
+
+  const ref = useRef();
   const toggleCart = () => {
     if (ref.current.classList.contains("translate-x-full")) {
       ref.current.classList.remove("translate-x-full");
@@ -22,7 +33,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       ref.current.classList.remove("block");
     }
   };
-  const ref = useRef();
+
   return (
     <div className="sticky top-0 bg-white z-10">
       <header className="text-gray-600 body-font">
@@ -47,24 +58,64 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Mugs
             </Link>
           </nav>
-          <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-            Login
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="w-4 h-4 ml-1"
-              viewBox="0 0 24 24"
+
+          <div className="md:ml-auto cursor-pointer">
+            <a
+              onMouseOver={() => {
+                setDropdown(true);
+              }}
+              onMouseLeave={() => {
+                setDropdown(false);
+              }}
             >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </button>
-          <div className="ml-auto">
-            <Link href={"/login"}>
-              <MdAccountCircle className="text-3xl" />
-            </Link>
+              {dropdown && (
+                <div
+                  className="absolute right-28 top-14 p-4 w-40 bg-gray-100"
+                  onMouseOver={() => {
+                    setDropdown(true);
+                  }}
+                  onMouseLeave={() => {
+                    setDropdown(false);
+                  }}
+                >
+                  <ul>
+                    <li className="py-1 text-sm font-bold hover:text-black">
+                      My Account
+                    </li>
+                    <hr />
+                    <li className="py-1 text-sm font-bold hover:text-black">
+                      Orders
+                    </li>
+                    <hr />
+                    <li
+                      onClick={logout}
+                      className="py-1 text-sm font-bold hover:text-black"
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+              {user.value && <MdAccountCircle className="text-3xl" />}
+            </a>
+            {!user.value && (
+              <Link href={"/login"}>
+                <button className="inline-flex text-white items-center bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-300 rounded text-base mt-4 md:mt-0">
+                  Login
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    className="w-4 h-4 ml-1"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </Link>
+            )}
           </div>
 
           <div

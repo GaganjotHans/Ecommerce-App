@@ -30,6 +30,7 @@ const Login = () => {
     setEmail("");
     setPassword("");
     if (result.success) {
+      localStorage.setItem("token", result.token);
       toast.success("You have successfully Logged In.");
       setTimeout(() => {
         router.push("/");
