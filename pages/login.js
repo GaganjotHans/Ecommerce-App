@@ -9,24 +9,27 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      router.push("/");
-    }
-  });
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     router.push("/");
+  //   }
+  // });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { email, password };
     let result = "";
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       result = await response.json();
     } catch (error) {

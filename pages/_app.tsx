@@ -34,8 +34,6 @@ export default function App({ Component, pageProps }: AppProps) {
       if (storedCart !== null) {
         setCart(JSON.parse(storedCart));
         saveCart(JSON.parse(storedCart));
-      } else {
-        console.log("Nothing in the local storage cart");
       }
     } catch (error) {
       console.error(error);
@@ -52,6 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
     localStorage.removeItem("token");
     setUser({ value: "" });
     setKey(Math.random());
+    router.push("/");
   };
   const addToCart = (
     itemCode: string,

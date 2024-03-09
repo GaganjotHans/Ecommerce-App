@@ -12,7 +12,7 @@ export default function Page({ addToCart, product, variants, buyNow }) {
   const [color, setcolor] = useState(product.color);
   const [size, setSize] = useState(product.size);
   const refreshVariant = (newsize, newcolor) => {
-    let url = `http://localhost:3000/product/${variants[newcolor][newsize]["slug"]}`;
+    let url = `${process.env.NEXT_PUBLIC_HOST}/product/${variants[newcolor][newsize]["slug"]}`;
     window.location = url;
   };
   const notify = () => toast.success("Added to Cart Successfully!");

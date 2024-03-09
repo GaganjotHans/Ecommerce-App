@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
+import mongoose from "mongoose";
+import Order from "../models/Order";
 
-const Order = () => {
+const Orders = () => {
   return (
     <section className="text-gray-600 body-font overflow-hidden">
       <div className="container px-5 py-24 mx-auto">
@@ -25,7 +27,7 @@ const Order = () => {
               </a>
             </div>
 
-            <div className="flex  border-gray-200 py-2">
+            <div className="flex border-gray-200 py-2">
               <span className="text-gray-500">Wear the code (XL/Black)</span>
               <span className="ml-auto text-gray-900">1</span>
               <span className="ml-auto text-gray-900">$58</span>
@@ -52,15 +54,22 @@ const Order = () => {
               </button>
             </div>
           </div>
-          {/* <img
-            alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src="https://dummyimage.com/400x400"
-          /> */}
         </div>
       </div>
     </section>
   );
 };
 
-export default Order;
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  let orders = await Order.find({ slug: context.query.slug });
+
+  return {
+    props: {
+      orders: orders,
+    },
+  };
+}
+export default Orders;

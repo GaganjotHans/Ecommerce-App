@@ -60,7 +60,7 @@ const Navbar = ({
           </nav>
 
           <div className="md:ml-auto cursor-pointer">
-            <a
+            <div
               onMouseOver={() => {
                 setDropdown(true);
               }}
@@ -79,13 +79,17 @@ const Navbar = ({
                   }}
                 >
                   <ul>
-                    <li className="py-1 text-sm font-bold hover:text-black">
-                      My Account
-                    </li>
+                    <Link href={"/myaccount"}>
+                      <li className="py-1 text-sm font-bold hover:text-black">
+                        My Account
+                      </li>
+                    </Link>
                     <hr />
-                    <li className="py-1 text-sm font-bold hover:text-black">
-                      Orders
-                    </li>
+                    <Link href={"/orders"}>
+                      <li className="py-1 text-sm font-bold hover:text-black">
+                        Orders
+                      </li>
+                    </Link>
                     <hr />
                     <li
                       onClick={logout}
@@ -97,7 +101,7 @@ const Navbar = ({
                 </div>
               )}
               {user.value && <MdAccountCircle className="text-3xl" />}
-            </a>
+            </div>
             {!user.value && (
               <Link href={"/login"}>
                 <button className="inline-flex text-white items-center bg-pink-500 border-0 py-1 px-3 focus:outline-none hover:bg-pink-300 rounded text-base mt-4 md:mt-0">
