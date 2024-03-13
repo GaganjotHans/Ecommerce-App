@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
 
 const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [disabled, setDisabled] = useState(true);
+
+  const handleChange = (e) => {
+    if (e.target.name == "name") {
+      setName(e.target.value);
+    } else if (e.target.name == "email") {
+      setEmail(e.target.value);
+    } else if (e.target.name == "phone") {
+      setPhone(e.target.value);
+    } else if (e.target.name == "address") {
+      setAddress(e.target.value);
+    } else if (e.target.name == "postalCode") {
+      setPostalCode(e.target.value);
+    }
+    setTimeout(() => {
+      if (
+        name.length > 2 &&
+        email.length > 2 &&
+        phone.length > 2 &&
+        address.length > 2 &&
+        postalCode.length > 2
+      ) {
+        setDisabled(false);
+      } else {
+        setDisabled(true);
+      }
+    }, 1000);
+  };
+
   return (
     <div className="container px-2 m-auto">
       <h1 className="font-bold text-3xl my-8 text-center">Checkout</h1>
@@ -15,6 +49,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Name
             </label>
             <input
+              onChange={handleChange}
+              value={name}
               type="text"
               id="name"
               name="name"
@@ -28,6 +64,8 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Email
             </label>
             <input
+              onChange={handleChange}
+              value={email}
               type="email"
               id="email"
               name="email"
@@ -41,14 +79,16 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           <label htmlFor="address" className="leading-7 text-sm text-gray-600">
             Street Address
           </label>
-          <input type="email" id="email" name="email" />
-          <textarea
+          <input
+            onChange={handleChange}
+            value={address}
             name="address"
+            type="text" // Corrected type here
             id="address"
             cols="30"
             rows="2"
             className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-          ></textarea>
+          />
         </div>
       </div>
       <div className="mx-auto flex my-4">
@@ -58,7 +98,9 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Phone
             </label>
             <input
-              type="phone"
+              onChange={handleChange}
+              value={phone}
+              type="number"
               id="phone"
               name="phone"
               className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
@@ -102,9 +144,11 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               Postal Code
             </label>
             <input
+              onChange={handleChange}
+              value={postalCode}
               type="text"
-              id="postalcode"
-              name="postalcode"
+              id="postalCode"
+              name="postalCode"
               className="w-full bg-white rounded border border-gray-300 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
@@ -162,7 +206,10 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 
       <div className="mx-1">
         <Link href={"/checkout"}>
-          <button className="flex mx-2 mt-8 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
+          <button
+            disabled={disabled}
+            className="disabled:bg-pink-300 flex mx-2 mt-8 text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg"
+          >
             <IoBagCheckOutline className="m-1" />
             Pay ${subTotal}
           </button>
